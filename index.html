@@ -150,6 +150,7 @@
     .hero-chip {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       background: rgba(124, 112, 238, 0.1);
       border: 1px solid rgba(124, 112, 238, 0.2);
@@ -160,7 +161,13 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--purple);
-      margin-bottom: 32px;
+      margin: 0 auto 16px;
+    }
+
+    .hero-chip-wrap {
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
 
     .hero-chip .chip-dot {
@@ -597,9 +604,11 @@
   <!-- ── Hero ── -->
   <section class="hero">
     <div class="container">
-      <div class="hero-chip">
-        <span class="chip-dot"></span>
-        <span data-i18n="heroChip">Piloto Barcelona</span>
+      <div style="display:block; text-align:center;">
+        <div class="hero-chip">
+          <span class="chip-dot"></span>
+          <span data-i18n="heroChip">Piloto Barcelona</span>
+        </div>
       </div>
       <div class="hero-wordmark" id="heroWordmark">vec<span class="i-lime">ı</span>nos<span class="lime-dot">.</span></div>
       <p class="hero-tagline" data-i18n="heroTagline">El toque digital a la puerta de tu vecino</p>
@@ -809,7 +818,7 @@
         heroChip: 'Pilot Barcelona',
         heroTagline: 'El toc digital a la porta del teu veí',
         heroSubtitle: 'Fer que trucar a la porta del teu veí sigui menys incòmode i més divertit. Una plataforma comunitària basada en la confiança per al teu edifici.',
-        heroCta: 'Únete a la lista de espera',
+        heroCta: "Uneix-te a la llista d'espera",
         valuesLabel: 'Per què veïns',
         valuesTitle: 'Fet per a veïns de veritat',
         valuesSubtitle: 'No és una altra xarxa social. Un espai privat i verificat per a les persones que comparteixen el teu edifici.',
@@ -889,7 +898,7 @@
 
     // ─── Google Sheets Waitlist ───
     // SETUP: Replace this URL with your Google Apps Script web app URL
-    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/library/d/1P7Yzh0cAscjNzKxl6TWPkg0v4dqJg128NMDtnYfqEfKXw8c1p6kMSCkk/3';
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiaTANzD3ISpcZmUmMKGuj7GmoBEkeW9W0PkE-NV8mhRIXaLkjx4plgbn3VlMkgLYO/exec';
 
     document.getElementById('waitlistForm').addEventListener('submit', function(e) {
       e.preventDefault();
