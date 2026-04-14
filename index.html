@@ -69,6 +69,12 @@
       justify-content: space-between;
     }
 
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     .nav-logo {
       font-family: 'Nunito', sans-serif;
       font-weight: 900;
@@ -80,6 +86,39 @@
     }
 
     .nav-logo .dot { color: var(--lime); }
+
+    /* ── Language Toggle ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--purple-light);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .lang-btn {
+      padding: 4px 12px;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    .lang-btn:hover:not(.active) {
+      color: var(--purple);
+    }
 
     .nav-cta {
       display: inline-flex;
@@ -192,6 +231,7 @@
     }
 
     .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .btn-primary .arrow { font-size: 18px; transition: transform 0.2s; }
     .btn-primary:hover .arrow { transform: translateX(3px); }
@@ -409,6 +449,15 @@
       color: var(--text-muted);
     }
 
+    .waitlist-error {
+      display: none;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #e74c3c;
+    }
+
+    .waitlist-error.show { display: block; }
+
     /* ── Footer ── */
     footer {
       padding: 40px 0;
@@ -444,30 +493,77 @@
       transform: translateX(-50%);
     }
 
-    /* Nav size */
+    /* Double lime dots for Catalan ï */
+    .i-lime-double {
+      position: relative;
+      display: inline-block;
+    }
+
+    .i-lime-double::before,
+    .i-lime-double::after {
+      content: '';
+      position: absolute;
+      background: var(--lime);
+      border-radius: 50%;
+      z-index: 1;
+      top: 0;
+    }
+
+    /* Nav size — single dot */
     .nav-logo .i-lime::before {
       width: 6px; height: 6px;
       top: 2px;
     }
+    /* Nav size — double dots */
+    .nav-logo .i-lime-double::before,
+    .nav-logo .i-lime-double::after {
+      width: 5px; height: 5px;
+      top: 2px;
+    }
+    .nav-logo .i-lime-double::before { left: -1px; }
+    .nav-logo .i-lime-double::after { right: -1px; }
 
-    /* Hero size */
+    /* Hero size — single dot */
     .hero-wordmark .i-lime::before {
       width: 16px; height: 16px;
       top: 4px;
     }
+    /* Hero size — double dots */
+    .hero-wordmark .i-lime-double::before,
+    .hero-wordmark .i-lime-double::after {
+      width: 12px; height: 12px;
+      top: 4px;
+    }
+    .hero-wordmark .i-lime-double::before { left: -4px; }
+    .hero-wordmark .i-lime-double::after { right: -4px; }
 
     @media (min-width: 768px) {
       .hero-wordmark .i-lime::before {
         width: 24px; height: 24px;
         top: 6px;
       }
+      .hero-wordmark .i-lime-double::before,
+      .hero-wordmark .i-lime-double::after {
+        width: 18px; height: 18px;
+        top: 6px;
+      }
+      .hero-wordmark .i-lime-double::before { left: -6px; }
+      .hero-wordmark .i-lime-double::after { right: -6px; }
     }
 
-    /* Footer size */
+    /* Footer size — single dot */
     .footer-logo .i-lime::before {
       width: 5px; height: 5px;
       top: 2px;
     }
+    /* Footer size — double dots */
+    .footer-logo .i-lime-double::before,
+    .footer-logo .i-lime-double::after {
+      width: 4px; height: 4px;
+      top: 2px;
+    }
+    .footer-logo .i-lime-double::before { left: -1px; }
+    .footer-logo .i-lime-double::after { right: -1px; }
 
     .footer-tagline {
       font-size: 13px;
@@ -486,8 +582,15 @@
   <!-- ── Nav ── -->
   <nav>
     <div class="nav-inner">
-      <a href="#" class="nav-logo">vec<span class="i-lime">ı</span>nos<span class="dot">.</span></a>
-      <a href="#waitlist" class="nav-cta">Unirme</a>
+      <div class="nav-left">
+        <a href="#" class="nav-logo" id="navLogo">vec<span class="i-lime">ı</span>nos<span class="dot">.</span></a>
+        <div class="lang-toggle">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn active" data-lang="es">ES</button>
+          <button class="lang-btn" data-lang="ca">CA</button>
+        </div>
+      </div>
+      <a href="#waitlist" class="nav-cta" data-i18n="navCta">Únete</a>
     </div>
   </nav>
 
@@ -496,16 +599,15 @@
     <div class="container">
       <div class="hero-chip">
         <span class="chip-dot"></span>
-        Barcelona Pilot
+        <span data-i18n="heroChip">Piloto Barcelona</span>
       </div>
-      <div class="hero-wordmark">vec<span class="i-lime">ı</span>nos<span class="lime-dot">.</span></div>
-      <p class="hero-tagline">El toque digital a la puerta de tu vecino</p>
-      <p class="hero-subtitle">
-        Making knocking on your neighbors door less awkward and more fun.
-        A trust-first community platform for your apartment building.
+      <div class="hero-wordmark" id="heroWordmark">vec<span class="i-lime">ı</span>nos<span class="lime-dot">.</span></div>
+      <p class="hero-tagline" data-i18n="heroTagline">El toque digital a la puerta de tu vecino</p>
+      <p class="hero-subtitle" data-i18n="heroSubtitle">
+        Hacer que tocar la puerta de tu vecino sea menos incómodo y más divertido. Una plataforma comunitaria basada en la confianza para tu edificio.
       </p>
       <a href="#waitlist" class="btn-primary">
-        Unirme a la lista <span class="arrow">&rarr;</span>
+        <span data-i18n="heroCta">Únete a la lista de espera</span> <span class="arrow">&rarr;</span>
       </a>
     </div>
   </section>
@@ -513,26 +615,26 @@
   <!-- ── Value Props ── -->
   <section class="values">
     <div class="container">
-      <div class="section-label">Por qu&eacute; vecinos</div>
-      <h2 class="section-title">Built for real neighbors</h2>
-      <p class="section-subtitle">
-        Not another social network. A private, verified space for the people who share your building.
+      <div class="section-label" data-i18n="valuesLabel">Por qué vecinos</div>
+      <h2 class="section-title" data-i18n="valuesTitle">Hecho para vecinos de verdad</h2>
+      <p class="section-subtitle" data-i18n="valuesSubtitle">
+        No es otra red social. Un espacio privado y verificado para las personas que comparten tu edificio.
       </p>
       <div class="values-grid">
         <div class="value-card">
           <div class="value-icon">&#x1f512;</div>
-          <h3>Confianza primero</h3>
-          <p>Every neighbor is verified by building. No strangers, no spam — just the people who live next door.</p>
+          <h3 data-i18n="card1Title">Confianza primero</h3>
+          <p data-i18n="card1Desc">Cada vecino está verificado por edificio. Sin desconocidos, sin spam — solo las personas que viven al lado.</p>
         </div>
         <div class="value-card">
           <div class="value-icon">&#x1f3e0;</div>
-          <h3>Hiperlocal</h3>
-          <p>Your community is your building. Share tools, coordinate repairs, or just say hello — all within your block.</p>
+          <h3 data-i18n="card2Title">Hiperlocal</h3>
+          <p data-i18n="card2Desc">Tu comunidad es tu edificio. Comparte herramientas, coordina reparaciones o simplemente saluda — todo dentro de tu bloque.</p>
         </div>
         <div class="value-card">
           <div class="value-icon">&#x1f91d;</div>
-          <h3>Comunidad real</h3>
-          <p>No pressure, no performance. Just a simple way to connect with the people you already share a space with.</p>
+          <h3 data-i18n="card3Title">Comunidad real</h3>
+          <p data-i18n="card3Desc">Sin presión, sin apariencias. Una forma sencilla de conectar con las personas con las que ya compartes espacio.</p>
         </div>
       </div>
     </div>
@@ -541,26 +643,26 @@
   <!-- ── How It Works ── -->
   <section class="how-it-works">
     <div class="container">
-      <div class="section-label">C&oacute;mo funciona</div>
-      <h2 class="section-title">Three steps to your community</h2>
-      <p class="section-subtitle">
-        Simple by design. No lengthy onboarding, no complicated profiles.
+      <div class="section-label" data-i18n="howLabel">Cómo funciona</div>
+      <h2 class="section-title" data-i18n="howTitle">Tres pasos hacia tu comunidad</h2>
+      <p class="section-subtitle" data-i18n="howSubtitle">
+        Simple por diseño. Sin registros largos, sin perfiles complicados.
       </p>
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
-          <h3>Reg&iacute;strate</h3>
-          <p>Sign up with your email. Quick, private, and secure.</p>
+          <h3 data-i18n="step1Title">Regístrate</h3>
+          <p data-i18n="step1Desc">Regístrate con tu email. Rápido, privado y seguro.</p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3>Verifica tu edificio</h3>
-          <p>Confirm your address so we can connect you to your actual neighbors.</p>
+          <h3 data-i18n="step2Title">Verifica tu edificio</h3>
+          <p data-i18n="step2Desc">Confirma tu dirección para que podamos conectarte con tus vecinos reales.</p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>Conecta</h3>
-          <p>Start sharing, asking, and building the community your building deserves.</p>
+          <h3 data-i18n="step3Title">Conecta</h3>
+          <p data-i18n="step3Desc">Empieza a compartir, preguntar y construir la comunidad que tu edificio merece.</p>
         </div>
       </div>
     </div>
@@ -570,20 +672,23 @@
   <section class="waitlist" id="waitlist">
     <div class="container">
       <div class="waitlist-box">
-        <div class="section-label">Lista de espera</div>
-        <h2 class="section-title">Be the first in your building</h2>
-        <p class="section-subtitle" style="margin-bottom: 32px;">
-          We're launching building by building in Barcelona. Join the waitlist and we'll let you know when it's your turn.
+        <div class="section-label" data-i18n="waitlistLabel">Lista de espera</div>
+        <h2 class="section-title" data-i18n="waitlistTitle">Sé el primero en tu edificio</h2>
+        <p class="section-subtitle" style="margin-bottom: 32px;" data-i18n="waitlistSubtitle">
+          Estamos lanzando edificio por edificio en Barcelona. Únete a la lista y te avisaremos cuando sea tu turno.
         </p>
         <form class="waitlist-form" id="waitlistForm">
-          <input type="email" placeholder="tu@email.com" required>
-          <button type="submit" class="btn-primary">Unirme <span class="arrow">&rarr;</span></button>
+          <input type="email" data-i18n-placeholder="waitlistPlaceholder" placeholder="tu@email.com" required>
+          <button type="submit" class="btn-primary" id="waitlistBtn">
+            <span data-i18n="waitlistBtn">Únete</span> <span class="arrow">&rarr;</span>
+          </button>
         </form>
-        <p class="waitlist-note">No spam. Solo te avisamos cuando lancemos en tu zona.</p>
+        <p class="waitlist-note" data-i18n="waitlistNote">No spam. Solo te avisamos cuando lancemos en tu zona.</p>
+        <div class="waitlist-error" id="waitlistError" data-i18n="waitlistError">Algo salió mal. Inténtalo de nuevo.</div>
         <div class="waitlist-success" id="waitlistSuccess">
           <div class="check">&#x2713;</div>
-          <h3>&iexcl;Bienvenido, vecino!</h3>
-          <p>You're on the list. We'll reach out when we launch in your area.</p>
+          <h3 data-i18n="successTitle">¡Bienvenido, vecino!</h3>
+          <p data-i18n="successMsg">Estás en la lista. Te contactaremos cuando lancemos en tu zona.</p>
         </div>
       </div>
     </div>
@@ -592,20 +697,242 @@
   <!-- ── Footer ── -->
   <footer>
     <div class="container">
-      <div class="footer-logo">vec<span class="i-lime">ı</span>nos<span class="dot">.</span></div>
-      <p class="footer-tagline">Tu comunidad digital &middot; Built for Barcelona</p>
-      <p class="footer-credit">A project by Brit &amp; Ahmad &middot; 2026</p>
+      <div class="footer-logo" id="footerLogo">vec<span class="i-lime">ı</span>nos<span class="dot">.</span></div>
+      <p class="footer-tagline" data-i18n="footerTagline">Tu comunidad digital · Hecho para Barcelona</p>
+      <p class="footer-credit" data-i18n="footerCredit">Un proyecto de Brit &amp; Ahmad · 2026</p>
     </div>
   </footer>
 
   <script>
+    // ─── Brand name HTML per language (with lime dot on the "i") ───
+    var brandNames = {
+      es: {
+        nav:  'vec<span class="i-lime">\u0131</span>nos<span class="dot">.</span>',
+        hero: 'vec<span class="i-lime">\u0131</span>nos<span class="lime-dot">.</span>',
+        footer: 'vec<span class="i-lime">\u0131</span>nos<span class="dot">.</span>'
+      },
+      en: {
+        nav:  'ne<span class="i-lime">\u0131</span>ghbors<span class="dot">.</span>',
+        hero: 'ne<span class="i-lime">\u0131</span>ghbors<span class="lime-dot">.</span>',
+        footer: 'ne<span class="i-lime">\u0131</span>ghbors<span class="dot">.</span>'
+      },
+      ca: {
+        nav:  've<span class="i-lime-double">\u0131</span>ns<span class="dot">.</span>',
+        hero: 've<span class="i-lime-double">\u0131</span>ns<span class="lime-dot">.</span>',
+        footer: 've<span class="i-lime-double">\u0131</span>ns<span class="dot">.</span>'
+      }
+    };
+
+    // ─── Page titles per language ───
+    var pageTitles = {
+      es: 'vecinos. — Tu comunidad digital',
+      en: 'neighbors. — Your digital community',
+      ca: 'veïns. — La teva comunitat digital'
+    };
+
+    // ─── Translations ───
+    var translations = {
+      es: {
+        navCta: 'Únete',
+        heroChip: 'Piloto Barcelona',
+        heroTagline: 'El toque digital a la puerta de tu vecino',
+        heroSubtitle: 'Hacer que tocar la puerta de tu vecino sea menos incómodo y más divertido. Una plataforma comunitaria basada en la confianza para tu edificio.',
+        heroCta: 'Únete a la lista de espera',
+        valuesLabel: 'Por qué vecinos',
+        valuesTitle: 'Hecho para vecinos de verdad',
+        valuesSubtitle: 'No es otra red social. Un espacio privado y verificado para las personas que comparten tu edificio.',
+        card1Title: 'Confianza primero',
+        card1Desc: 'Cada vecino está verificado por edificio. Sin desconocidos, sin spam — solo las personas que viven al lado.',
+        card2Title: 'Hiperlocal',
+        card2Desc: 'Tu comunidad es tu edificio. Comparte herramientas, coordina reparaciones o simplemente saluda — todo dentro de tu bloque.',
+        card3Title: 'Comunidad real',
+        card3Desc: 'Sin presión, sin apariencias. Una forma sencilla de conectar con las personas con las que ya compartes espacio.',
+        howLabel: 'Cómo funciona',
+        howTitle: 'Tres pasos hacia tu comunidad',
+        howSubtitle: 'Simple por diseño. Sin registros largos, sin perfiles complicados.',
+        step1Title: 'Regístrate',
+        step1Desc: 'Regístrate con tu email. Rápido, privado y seguro.',
+        step2Title: 'Verifica tu edificio',
+        step2Desc: 'Confirma tu dirección para que podamos conectarte con tus vecinos reales.',
+        step3Title: 'Conecta',
+        step3Desc: 'Empieza a compartir, preguntar y construir la comunidad que tu edificio merece.',
+        waitlistLabel: 'Lista de espera',
+        waitlistTitle: 'Sé el primero en tu edificio',
+        waitlistSubtitle: 'Estamos lanzando edificio por edificio en Barcelona. Únete a la lista y te avisaremos cuando sea tu turno.',
+        waitlistPlaceholder: 'tu@email.com',
+        waitlistBtn: 'Únete',
+        waitlistNote: 'No spam. Solo te avisamos cuando lancemos en tu zona.',
+        waitlistError: 'Algo salió mal. Inténtalo de nuevo.',
+        successTitle: '¡Bienvenido, vecino!',
+        successMsg: 'Estás en la lista. Te contactaremos cuando lancemos en tu zona.',
+        footerTagline: 'Tu comunidad digital · Hecho para Barcelona',
+        footerCredit: 'Un proyecto de Brit &amp; Ahmad · 2026'
+      },
+      en: {
+        navCta: 'Join',
+        heroChip: 'Barcelona Pilot',
+        heroTagline: 'The digital knock on your neighbor\'s door',
+        heroSubtitle: 'Making knocking on your neighbor\'s door less awkward and more fun. A trust-first community platform for your apartment building.',
+        heroCta: 'Join the waitlist',
+        valuesLabel: 'Why neighbors',
+        valuesTitle: 'Built for real neighbors',
+        valuesSubtitle: 'Not another social network. A private, verified space for the people who share your building.',
+        card1Title: 'Trust first',
+        card1Desc: 'Every neighbor is verified by building. No strangers, no spam — just the people who live next door.',
+        card2Title: 'Hyperlocal',
+        card2Desc: 'Your community is your building. Share tools, coordinate repairs, or just say hello — all within your block.',
+        card3Title: 'Real community',
+        card3Desc: 'No pressure, no performance. Just a simple way to connect with the people you already share a space with.',
+        howLabel: 'How it works',
+        howTitle: 'Three steps to your community',
+        howSubtitle: 'Simple by design. No lengthy onboarding, no complicated profiles.',
+        step1Title: 'Sign up',
+        step1Desc: 'Sign up with your email. Quick, private, and secure.',
+        step2Title: 'Verify your building',
+        step2Desc: 'Confirm your address so we can connect you to your actual neighbors.',
+        step3Title: 'Connect',
+        step3Desc: 'Start sharing, asking, and building the community your building deserves.',
+        waitlistLabel: 'Waitlist',
+        waitlistTitle: 'Be the first in your building',
+        waitlistSubtitle: 'We\'re launching building by building in Barcelona. Join the waitlist and we\'ll let you know when it\'s your turn.',
+        waitlistPlaceholder: 'you@email.com',
+        waitlistBtn: 'Join',
+        waitlistNote: 'No spam. We\'ll only notify you when we launch in your area.',
+        waitlistError: 'Something went wrong. Please try again.',
+        successTitle: 'Welcome, neighbor!',
+        successMsg: 'You\'re on the list. We\'ll reach out when we launch in your area.',
+        footerTagline: 'Your digital community · Built for Barcelona',
+        footerCredit: 'A project by Brit &amp; Ahmad · 2026'
+      },
+      ca: {
+        navCta: 'Uneix-te',
+        heroChip: 'Pilot Barcelona',
+        heroTagline: 'El toc digital a la porta del teu veí',
+        heroSubtitle: 'Fer que trucar a la porta del teu veí sigui menys incòmode i més divertit. Una plataforma comunitària basada en la confiança per al teu edifici.',
+        heroCta: 'Únete a la lista de espera',
+        valuesLabel: 'Per què veïns',
+        valuesTitle: 'Fet per a veïns de veritat',
+        valuesSubtitle: 'No és una altra xarxa social. Un espai privat i verificat per a les persones que comparteixen el teu edifici.',
+        card1Title: 'Confiança primer',
+        card1Desc: 'Cada veí està verificat per edifici. Sense desconeguts, sense spam — només les persones que viuen al costat.',
+        card2Title: 'Hiperlocal',
+        card2Desc: 'La teva comunitat és el teu edifici. Comparteix eines, coordina reparacions o simplement saluda — tot dins del teu bloc.',
+        card3Title: 'Comunitat real',
+        card3Desc: 'Sense pressió, sense aparences. Una manera senzilla de connectar amb les persones amb qui ja comparteixes espai.',
+        howLabel: 'Com funciona',
+        howTitle: 'Tres passos cap a la teva comunitat',
+        howSubtitle: 'Simple per disseny. Sense registres llargs, sense perfils complicats.',
+        step1Title: 'Registra\'t',
+        step1Desc: 'Registra\'t amb el teu email. Ràpid, privat i segur.',
+        step2Title: 'Verifica el teu edifici',
+        step2Desc: 'Confirma la teva adreça perquè puguem connectar-te amb els teus veïns reals.',
+        step3Title: 'Connecta',
+        step3Desc: 'Comença a compartir, preguntar i construir la comunitat que el teu edifici mereix.',
+        waitlistLabel: 'Llista d\'espera',
+        waitlistTitle: 'Sigues el primer al teu edifici',
+        waitlistSubtitle: 'Estem llançant edifici per edifici a Barcelona. Uneix-te a la llista i t\'avisarem quan sigui el teu torn.',
+        waitlistPlaceholder: 'tu@email.com',
+        waitlistBtn: 'Uneix-te',
+        waitlistNote: 'Sense spam. Només t\'avisem quan llancem a la teva zona.',
+        waitlistError: 'Alguna cosa ha anat malament. Torna-ho a provar.',
+        successTitle: 'Benvingut, veí!',
+        successMsg: 'Ets a la llista. Et contactarem quan llancem a la teva zona.',
+        footerTagline: 'La teva comunitat digital · Fet per a Barcelona',
+        footerCredit: 'Un projecte de Brit &amp; Ahmad · 2026'
+      }
+    };
+
+    // ─── Language Switcher ───
+    var currentLang = localStorage.getItem('vecinos-lang') || 'es';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('vecinos-lang', lang);
+      document.documentElement.lang = lang;
+
+      // Update page title
+      document.title = pageTitles[lang];
+
+      // Update toggle buttons
+      document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      // Update brand wordmarks (nav, hero, footer)
+      document.getElementById('navLogo').innerHTML = brandNames[lang].nav;
+      document.getElementById('heroWordmark').innerHTML = brandNames[lang].hero;
+      document.getElementById('footerLogo').innerHTML = brandNames[lang].footer;
+
+      // Update all data-i18n text elements
+      var t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.dataset.i18n;
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        var key = el.dataset.i18nPlaceholder;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+    }
+
+    // Init language on load
+    setLanguage(currentLang);
+
+    // Toggle click handlers
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setLanguage(this.dataset.lang);
+      });
+    });
+
+    // ─── Google Sheets Waitlist ───
+    // SETUP: Replace this URL with your Google Apps Script web app URL
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/library/d/1P7Yzh0cAscjNzKxl6TWPkg0v4dqJg128NMDtnYfqEfKXw8c1p6kMSCkk/3';
+
     document.getElementById('waitlistForm').addEventListener('submit', function(e) {
       e.preventDefault();
       var form = this;
+      var emailInput = form.querySelector('input[type="email"]');
+      var btn = document.getElementById('waitlistBtn');
+      var btnText = btn.querySelector('[data-i18n]');
       var success = document.getElementById('waitlistSuccess');
-      form.style.display = 'none';
-      document.querySelector('.waitlist-note').style.display = 'none';
-      success.classList.add('show');
+      var error = document.getElementById('waitlistError');
+      var email = emailInput.value;
+
+      // Hide previous error
+      error.classList.remove('show');
+
+      // If no Google Script URL configured, just show success (demo mode)
+      if (!GOOGLE_SCRIPT_URL) {
+        form.style.display = 'none';
+        document.querySelector('.waitlist-note').style.display = 'none';
+        success.classList.add('show');
+        return;
+      }
+
+      // Show loading state
+      btn.disabled = true;
+      var originalText = btnText.innerHTML;
+      btnText.innerHTML = '...';
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function() {
+        form.style.display = 'none';
+        document.querySelector('.waitlist-note').style.display = 'none';
+        success.classList.add('show');
+      })
+      .catch(function() {
+        error.classList.add('show');
+        btn.disabled = false;
+        btnText.innerHTML = originalText;
+      });
     });
   </script>
 
