@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vecinos. — Tu comunidad digital</title>
+  <meta name="description" content="A trust-first, hyperlocal platform for Barcelona apartment residents. Join your building's digital community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --purple: #7C70EE;
+      --purple-dark: #6558d9;
+      --purple-light: #f0eefa;
+      --lime: #C8E834;
+      --lime-dark: #b5d42a;
+      --white: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: rgba(26, 26, 46, 0.55);
+      --text-faint: rgba(26, 26, 46, 0.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 80px 0; }
+
+    @media (min-width: 768px) {
+      section { padding: 120px 0; }
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124, 112, 238, 0.08);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      color: var(--purple);
+      text-decoration: none;
+      letter-spacing: -1px;
+      position: relative;
+    }
+
+    .nav-logo .dot { color: var(--lime); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 20px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--purple-dark); }
+
+    /* ── Hero ── */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 80px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--purple-light) 0%, var(--white) 100%);
+    }
+
+    @media (min-width: 768px) {
+      .hero { padding-top: 180px; padding-bottom: 120px; }
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124, 112, 238, 0.1);
+      border: 1px solid rgba(124, 112, 238, 0.2);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 32px;
+    }
+
+    .hero-chip .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+    }
+
+    .hero-wordmark {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 72px;
+      color: var(--purple);
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 24px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-wordmark .lime-dot {
+      color: var(--lime);
+    }
+
+    @media (min-width: 768px) {
+      .hero-wordmark { font-size: 112px; letter-spacing: -5px; }
+    }
+
+    .hero-tagline {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--purple);
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-tagline { font-size: 26px; }
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    @media (min-width: 768px) {
+      .hero-subtitle { font-size: 18px; }
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 36px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 100px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+
+    .btn-primary .arrow { font-size: 18px; transition: transform 0.2s; }
+    .btn-primary:hover .arrow { transform: translateX(3px); }
+
+    /* ── Value Props ── */
+    .values { background: var(--white); }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--purple);
+      opacity: 0.5;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .section-title { font-size: 36px; }
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 56px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .values-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .value-card {
+      background: var(--purple-light);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: transform 0.2s;
+    }
+
+    .value-card:hover { transform: translateY(-4px); }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .value-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .value-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── How It Works ── */
+    .how-it-works {
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    .how-it-works .section-label { color: var(--lime); opacity: 1; }
+    .how-it-works .section-title { color: var(--white); }
+    .how-it-works .section-subtitle { color: rgba(255, 255, 255, 0.65); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .steps { grid-template-columns: repeat(3, 1fr); gap: 48px; }
+    }
+
+    .step { text-align: center; }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--lime);
+      margin: 0 auto 20px;
+    }
+
+    .step h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.7;
+    }
+
+    /* ── Waitlist ── */
+    .waitlist {
+      background: linear-gradient(180deg, var(--white) 0%, var(--purple-light) 100%);
+      text-align: center;
+    }
+
+    .waitlist-box {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 520px) {
+      .waitlist-form { flex-direction: row; }
+    }
+
+    .waitlist-form input[type="email"] {
+      flex: 1;
+      padding: 16px 20px;
+      border: 2px solid rgba(124, 112, 238, 0.2);
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--white);
+    }
+
+    .waitlist-form input[type="email"]::placeholder { color: var(--text-faint); }
+    .waitlist-form input[type="email"]:focus { border-color: var(--purple); }
+
+    .waitlist-form button {
+      padding: 16px 32px;
+      white-space: nowrap;
+    }
+
+    .waitlist-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .waitlist-success {
+      display: none;
+      padding: 24px;
+      background: rgba(124, 112, 238, 0.08);
+      border-radius: 16px;
+      margin-top: 24px;
+    }
+
+    .waitlist-success.show { display: block; }
+
+    .waitlist-success .check {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 12px;
+    }
+
+    .waitlist-success h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 4px;
+    }
+
+    .waitlist-success p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      background: var(--purple-light);
+      border-top: 1px solid rgba(124, 112, 238, 0.08);
+    }
+
+    .footer-logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      color: var(--purple);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .footer-logo .dot { color: var(--lime); }
+
+    /* ── Lime i-dot ── */
+    .i-lime {
+      position: relative;
+      display: inline-block;
+    }
+
+    .i-lime::before {
+      content: '';
+      position: absolute;
+      background: var(--lime);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    /* Nav size */
+    .nav-logo .i-lime::before {
+      width: 5px; height: 5px;
+      top: 0.05em; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Hero size */
+    .hero-wordmark .i-lime::before {
+      width: 12px; height: 12px;
+      top: 0.02em; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @media (min-width: 768px) {
+      .hero-wordmark .i-lime::before {
+        width: 18px; height: 18px;
+      }
+    }
+
+    /* Footer size */
+    .footer-logo .i-lime::before {
+      width: 4px; height: 4px;
+      top: 0.05em; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-bottom: 4px;
+    }
+
+    .footer-credit {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">vec<span class="i-lime">i</span>nos<span class="dot">.</span></a>
+      <a href="#waitlist" class="nav-cta">Unirme</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-chip">
+        <span class="chip-dot"></span>
+        Barcelona Pilot
+      </div>
+      <div class="hero-wordmark">vec<span class="i-lime">i</span>nos<span class="lime-dot">.</span></div>
+      <p class="hero-tagline">El toque digital a la puerta de tu vecino</p>
+      <p class="hero-subtitle">
+        Knocking on your neighbor's door — made less awkward, and more fun.
+        A trust-first community platform for your apartment building.
+      </p>
+      <a href="#waitlist" class="btn-primary">
+        Unirme a la lista <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Value Props ── -->
+  <section class="values">
+    <div class="container">
+      <div class="section-label">Por qu&eacute; vecinos</div>
+      <h2 class="section-title">Built for real neighbors</h2>
+      <p class="section-subtitle">
+        Not another social network. A private, verified space for the people who share your building.
+      </p>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">&#x1f512;</div>
+          <h3>Confianza primero</h3>
+          <p>Every neighbor is verified by building. No strangers, no spam — just the people who live next door.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">&#x1f3e0;</div>
+          <h3>Hiperlocal</h3>
+          <p>Your community is your building. Share tools, coordinate repairs, or just say hello — all within your block.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">&#x1f91d;</div>
+          <h3>Comunidad real</h3>
+          <p>No pressure, no performance. Just a simple way to connect with the people you already share a space with.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-label">C&oacute;mo funciona</div>
+      <h2 class="section-title">Three steps to your community</h2>
+      <p class="section-subtitle">
+        Simple by design. No lengthy onboarding, no complicated profiles.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Reg&iacute;strate</h3>
+          <p>Sign up with your email. Quick, private, and secure.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Verifica tu edificio</h3>
+          <p>Confirm your address so we can connect you to your actual neighbors.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Conecta</h3>
+          <p>Start sharing, asking, and building the community your building deserves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Waitlist ── -->
+  <section class="waitlist" id="waitlist">
+    <div class="container">
+      <div class="waitlist-box">
+        <div class="section-label">Lista de espera</div>
+        <h2 class="section-title">Be the first in your building</h2>
+        <p class="section-subtitle" style="margin-bottom: 32px;">
+          We're launching building by building in Barcelona. Join the waitlist and we'll let you know when it's your turn.
+        </p>
+        <form class="waitlist-form" id="waitlistForm">
+          <input type="email" placeholder="tu@email.com" required>
+          <button type="submit" class="btn-primary">Unirme <span class="arrow">&rarr;</span></button>
+        </form>
+        <p class="waitlist-note">No spam. Solo te avisamos cuando lancemos en tu zona.</p>
+        <div class="waitlist-success" id="waitlistSuccess">
+          <div class="check">&#x2713;</div>
+          <h3>&iexcl;Bienvenido, vecino!</h3>
+          <p>You're on the list. We'll reach out when we launch in your area.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">vec<span class="i-lime">i</span>nos<span class="dot">.</span></div>
+      <p class="footer-tagline">Tu comunidad digital &middot; Built for Barcelona</p>
+      <p class="footer-credit">A project by Brit &amp; Ahmad &middot; 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      var success = document.getElementById('waitlistSuccess');
+      form.style.display = 'none';
+      document.querySelector('.waitlist-note').style.display = 'none';
+      success.classList.add('show');
+    });
+  </script>
+
+</body>
+</html>
